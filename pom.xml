@@ -25,12 +25,14 @@
             <scope>test</scope>
         </dependency>
 
-        <!-- 添加mybatis 依赖-->
+        <!-- 添加dom4j解析xml -->
         <dependency>
-            <groupId>org.mybatis</groupId>
-            <artifactId>mybatis</artifactId>
-            <version>3.5.3</version>
+            <groupId>dom4j</groupId>
+            <artifactId>dom4j</artifactId>
+            <version>1.6.1</version>
         </dependency>
+
+
 
         <!-- mysql 驱动 -->
         <dependency>
