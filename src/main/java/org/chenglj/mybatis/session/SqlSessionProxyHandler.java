@@ -19,6 +19,8 @@ public class SqlSessionProxyHandler implements InvocationHandler {
     private SqlSession sqlSession;
 
     public SqlSessionProxyHandler(SqlSession sqlSession) {
+
+        logger.info("===");
         this.sqlSession = sqlSession;
     }
 

@@ -110,12 +110,6 @@ public class SqlSessionFactoryBuilder {
             Document read = saxReader.read(is);
             Element rootElement = read.getRootElement();
 
-            List<Element> elements = rootElement.element("environments").element("environment").element("dataSource").elements();
-            for (Element element : elements) {
-                logger.info("jdbc-value:{}",element.attributeValue("value"));
-            }
-
-
             Element properties = rootElement.element("properties");
             configPropertiesPath = properties.attributeValue("resource");
             logger.info("加载jdbc配置文件路径:{}",configPropertiesPath);

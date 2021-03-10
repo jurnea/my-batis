@@ -1,7 +1,5 @@
 package org.chenglj.mybatis.session;
 
-import org.chenglj.mybatis.config.Configuration;
-import org.chenglj.mybatis.config.MapperStatement;
 
 import java.util.List;
 
