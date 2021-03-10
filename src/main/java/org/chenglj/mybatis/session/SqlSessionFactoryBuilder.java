@@ -10,7 +10,6 @@ import org.dom4j.io.SAXReader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.xml.parsers.SAXParser;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.*;
@@ -55,7 +54,7 @@ public class SqlSessionFactoryBuilder {
 
             configuration.setDriver(p.getProperty("driver"));
             configuration.setUrl(p.getProperty("url"));
-            configuration.setName(p.getProperty("name"));
+            configuration.setName(p.getProperty("username"));
             configuration.setPassword(p.getProperty("password"));
 
         } catch (IOException e) {
@@ -74,9 +73,6 @@ public class SqlSessionFactoryBuilder {
                 Document document = saxReader.read(inputStream);
                 Element rootElement = document.getRootElement();
 
-                Element properties = rootElement.element("properties");
-                configPropertiesPath = properties.attributeValue("resource");
-
 
 
                 String namespace = rootElement.attributeValue("namespace");
@@ -93,7 +89,7 @@ public class SqlSessionFactoryBuilder {
                     mapper.setReturnType(resultType);
                     mapper.setSql(sql);
 
-                    map.put(namespace,mapper);
+                    map.put(namespace+"."+id,mapper);
                 }
 
                 inputStream.close();
@@ -119,6 +115,10 @@ public class SqlSessionFactoryBuilder {
                 logger.info("jdbc-value:{}",element.attributeValue("value"));
             }
 
+
+            Element properties = rootElement.element("properties");
+            configPropertiesPath = properties.attributeValue("resource");
+            logger.info("加载jdbc配置文件路径:{}",configPropertiesPath);
 
             List<Element> mappers = rootElement.element("mappers").elements("mapper");
             for (Element mapper : mappers) {

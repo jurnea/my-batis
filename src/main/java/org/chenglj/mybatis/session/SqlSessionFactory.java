@@ -13,7 +13,7 @@ public class SqlSessionFactory {
 
     public SqlSession openSession(){
 
-        return new SqlSession(config);
+        return new DefaultSqlSession(config);
     }
 
     public Configuration getConfig() {

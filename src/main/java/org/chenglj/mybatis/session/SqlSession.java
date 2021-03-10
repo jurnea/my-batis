@@ -1,27 +1,20 @@
 package org.chenglj.mybatis.session;
 
 import org.chenglj.mybatis.config.Configuration;
+import org.chenglj.mybatis.config.MapperStatement;
+
+import java.util.List;
 
 /*
  * @Description 
  * @Date  
  * @Author chenglj
  **/
-public class SqlSession implements AutoCloseable{
+public interface SqlSession extends AutoCloseable{
 
-    private Configuration configuration;
+    <T> T getMapper(Class<T> t);
 
-    public SqlSession(Configuration configuration){
-        this.configuration = configuration;
-    }
-    public <T> T getMapper(Class<T> clazz){
+    <T>T selectOne(String statement,Object param);
 
-
-        return (T)clazz;
-    }
-
-    @Override
-    public void close() throws Exception {
-        this.close();
-    }
+    <E>List<E> selectList(String statement,Object param);
 }

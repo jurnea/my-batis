@@ -30,9 +30,6 @@ public class MybatisDemo {
         InputStream inputStream = Thread.currentThread().getContextClassLoader().getResourceAsStream(resource);
         SqlSessionFactory sqlSessionFactory = new SqlSessionFactoryBuilder().build(inputStream);
 
-        if( true){
-            return;
-        }
         try (SqlSession session = sqlSessionFactory.openSession()) {
             UserMapper mapper = session.getMapper(UserMapper.class);
             User user = mapper.selectOne(1L);
