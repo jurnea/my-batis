@@ -14,6 +14,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.InputStream;
+import java.util.List;
 
 /*
  * @Description 
@@ -31,9 +32,11 @@ public class MybatisDemo {
         SqlSessionFactory sqlSessionFactory = new SqlSessionFactoryBuilder().build(inputStream);
 
         try (SqlSession session = sqlSessionFactory.openSession()) {
-            UserMapper mapper = session.getMapper(UserMapper.class);
-            User user = mapper.selectOne(1L);
-            logger.info("查询用户:{}",user);
+            UserMapper userMapper = session.getMapper(UserMapper.class);
+            User user = userMapper.selectOne(1L);
+            logger.info("selectOne查询用户:{}",user);
+            List<User> users = userMapper.selectAll();
+            logger.info("selectAll查询用户:{}",users);
         } catch (Exception e){
             e.printStackTrace();
         }

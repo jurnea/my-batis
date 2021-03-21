@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <mapper namespace="org.chenglj.mybatis.mapper.UserMapper">
     <select id="selectOne" resultType="org.chenglj.mybatis.entity.User">
-    <!--select * from user where id = #{id}-->
-        <!-- 先不带参数 -->
-        select * from user
+    select * from user where id = #{id}
   </select>
+
+    <select id="selectAll" resultType="org.chenglj.mybatis.entity.User">
+        select * from user
+    </select>
 </mapper>
