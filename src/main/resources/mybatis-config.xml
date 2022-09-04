@@ -16,6 +16,8 @@
         </environment>
     </environments>
     <mappers>
-        <mapper resource="mapper/UserMapper.xml"/>
+        <!-- 采用扫描包的方式，让Mybatis自己生成一个Mapper接口的实例-->
+        <package name="org.chenglj.mybatis.mapper"/>
+        <!--<mapper resource="mapper/UserMapper.xml"/> 取消单个Mybatis的Mapper文件的注册 -->
     </mappers>
 </configuration>
