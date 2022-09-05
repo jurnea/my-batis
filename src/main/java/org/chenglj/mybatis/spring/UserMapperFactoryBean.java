@@ -12,7 +12,7 @@ import javax.annotation.Resource;
  * @Date 2022/9/5 1:55
  * @Author chenglj
  **/
-@Component
+//@Component 注释掉，不使用注解的方式注册UserMapper2.java作为bean对象
 public class UserMapperFactoryBean implements FactoryBean<UserMapper2> {
 
     @Resource
