@@ -24,92 +24,6 @@ public class MybatisSpringDemoTest {
 
     private static AnnotationConfigApplicationContext context ;
 
-//    private static SqlSessionFactory sqlSessionFactory;
-
-    static {
-        context = new AnnotationConfigApplicationContext();
-        context.register(MybatisSpringDemo.class);
-
-
-    }
-
-    /**
-     * 测试Spring的环境
-     */
-    @Test
-    public void testSpringEnv(){
-        context.refresh();
-
-        UserService userService = context.getBean(UserService.class);
-        System.out.println(userService.queryUser());
-        Assert.assertNotNull(userService.queryUser());
-    }
-
-    /**
-     * 测试原始Mybatis的调用
-     * 注意，这里是通过XML文件访问Mybatis的，所以需要在Mybatis的配置文件中配置如下信息才能生效
-     * <mapper resource="mapper/UserMapper.xml"/>
-     */
-    @Test
-    public void testOriginMybatis(){
-        context.refresh();
-        SqlSessionFactory sqlSessionFactory = context.getBean(SqlSessionFactory.class);
-        UserMapper mapper = sqlSessionFactory.openSession().getMapper(UserMapper.class);
-        System.out.println(mapper.selectOne(1L));
-    }
-
-    @Test
-    public void testUserMapper2(){
-        context.refresh();
-        SqlSessionFactory sqlSessionFactory = context.getBean(SqlSessionFactory.class);
-        UserMapper2 mapper = sqlSessionFactory.openSession().getMapper(UserMapper2.class);
-        System.out.println(mapper.selectAll());
-    }
-
-    /**
-     * 测试将Mybatis的UserMapper2接口作为一个bean
-     */
-    @Test
-    public void testUserMapper2ByBeanDefinitionRegister(){
-        String beanName = UserMapper2.class.getSimpleName();
-        AbstractBeanDefinition beanDefinition = BeanDefinitionBuilder
-                .genericBeanDefinition(UserMapperFactoryBean.class)
-                .getBeanDefinition();
-        context.registerBeanDefinition(beanName, beanDefinition);
-        context.refresh();
-        UserMapper2 userMapper2Bean = (UserMapper2) context.getBean(beanName);
-        System.out.println(userMapper2Bean.selectAll());
-    }
-
-    /**
-     * 测试批量注册Mapper,与上一个相比不用写死
-     */
-    @Test
-    public void testRegisterMapperBatch(){
-        AbstractBeanDefinition beanDefinition = BeanDefinitionBuilder
-                .genericBeanDefinition(MapperFactoryBean.class)
-                .getBeanDefinition();
-
-        //1.为MapperFactoryBean的构造器添加值 UserMapper2.class
-        ConstructorArgumentValues constructorArgumentValues = new ConstructorArgumentValues();
-        constructorArgumentValues.addGenericArgumentValue(UserMapper2.class);
-        beanDefinition.setConstructorArgumentValues(constructorArgumentValues);
-        context.registerBeanDefinition(UserMapper2.class.getSimpleName(), beanDefinition);
-
-
-        //2.注册StudentMapper
-        AbstractBeanDefinition studentBeanDefinition = BeanDefinitionBuilder
-                .genericBeanDefinition(MapperFactoryBean.class)
-                .getBeanDefinition();
-        //为构造器传入Student2Mapper.class
-        studentBeanDefinition.getConstructorArgumentValues().addGenericArgumentValue(StudentMapper.class);
-
-        context.registerBeanDefinition(StudentMapper.class.getSimpleName(),studentBeanDefinition);
-
-        context.refresh();
-
-        runMybatisMapper(context);
-    }
 
     public void runMybatisMapper(ApplicationContext context){
         UserMapper2 userMapper2Bean = context.getBean(UserMapper2.class);
@@ -120,25 +34,23 @@ public class MybatisSpringDemoTest {
     }
 
     /**
-     * 通过包扫描的方式扫描，与上一种方式相比不用一个一个写
+     * 采用@Import注解的方式注册Mapper接口到Spring容器中。
      */
     @Test
-    public void testRegisterMapperBatchByScan(){
-        String mapperPackage = "org.chenglj.mybatis.mapper";
-        Set<Class<?>> mapperClasses = ClassUtil.scanPackage(mapperPackage);
-        for (Class<?> mapperClazz : mapperClasses) {
-            AbstractBeanDefinition beanDefinition = BeanDefinitionBuilder
-                    .genericBeanDefinition(MapperFactoryBean.class)
-                    .getBeanDefinition();
-            beanDefinition.getConstructorArgumentValues().addGenericArgumentValue(mapperClazz);
-            context.registerBeanDefinition(mapperClazz.getSimpleName(),beanDefinition);
-        }
-
+    public void testImportRegistrar(){
+        context = new AnnotationConfigApplicationContext();
+        context.register(MybatisSpringImportDemo.class);
         context.refresh();
-
         runMybatisMapper(context);
-
-
     }
+
+    @Test
+    public void testImportRegistrarV2(){
+        context = new AnnotationConfigApplicationContext();
+        context.register(MybatisSpringImportDemo2.class);
+        context.refresh();
+        runMybatisMapper(context);
+    }
+
 
 }
