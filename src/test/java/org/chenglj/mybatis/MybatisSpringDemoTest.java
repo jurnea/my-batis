@@ -10,6 +10,7 @@ import org.chenglj.mybatis.mapper.UserMapper2;
 import org.chenglj.mybatis.service.UserService;
 import org.chenglj.mybatis.spring.MapperFactoryBean;
 import org.chenglj.mybatis.spring.UserMapperFactoryBean;
+import org.chenglj.mybatis.spring.v4.MybatisSpringImportDemoV4;
 import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.beans.factory.config.ConstructorArgumentValues;
@@ -48,6 +49,17 @@ public class MybatisSpringDemoTest {
     public void testImportRegistrarV2(){
         context = new AnnotationConfigApplicationContext();
         context.register(MybatisSpringImportDemo2.class);
+        context.refresh();
+        runMybatisMapper(context);
+    }
+
+    /**
+     * 第四版优化，使用spring提供的classPathScanner注册BeanDefinition时修改为我们的目标MapperFactoryBean
+     */
+    @Test
+    public void testImportByScanRegistrarV4(){
+        context = new AnnotationConfigApplicationContext();
+        context.register(MybatisSpringImportDemoV4.class);
         context.refresh();
         runMybatisMapper(context);
     }
